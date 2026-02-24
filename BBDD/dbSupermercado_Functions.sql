@@ -30,7 +30,7 @@ BEGIN
             where tblproveedores.cif=_cif),0);
 end $$
 DELIMITER ;
-select dbsupermercado.fProveedor('A123456');
+select dbsupermercado.fProveedor('A1238856');
 
 /* Saber el ID de una categoria pasandole el nombre de la Categoría */
 
@@ -64,14 +64,32 @@ CREATE FUNCTION dbsupermercado.fCrearMarca(vmarca varchar(50))
 RETURNS varchar(50)
 DETERMINISTIC
 BEGIN
-    INSERT INTO dbSupermercado.tblMarcas(marca)
-    VALUES (upper(vmarca));
-    RETURN vmarca;
+    if  () then
+            INSERT INTO dbSupermercado.tblMarcas(marca)
+            VALUES (upper(vmarca));
+            RETURN vmarca;
+     else return 0;
+    end if;
 end $$
 DELIMITER ;
-
 select dbsupermercado.fCrearMarca('IBERICOS');
 
+/* Buscar marca */
+
+DROP FUNCTION IF EXISTS dbsupermercado.fBuscarMarca;
+DELIMITER $$
+CREATE FUNCTION dbsupermercado.fBuscarMarca(vNombreMarca varchar(50))
+returns varchar(50)
+deterministic
+begin
+    RETURN ifnull(
+            (select dbsupermercado.tblmarcas.marca
+            from dbsupermercado.tblmarcas
+            where tblmarcas.marca=vNombreMarca),0);
+
+end $$
+
+select dbsupermercado.fBuscarMarca('philips');
 
 /* Registrar un producto en la base de datos conociendo el codigo, nombre del producto, el precio, la cantidad, la medida, categoría, marca, si está en oferta o no, el proveedor del producto, el almacen y la tienda. Una vez que se registre, me devuelva el codigo de barras generado. */
 
