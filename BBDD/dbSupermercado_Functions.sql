@@ -58,6 +58,21 @@ CREATE PROCEDURE dbsupermercado.pCrearCategoria()
 
 /* Crear una marca */
 
+DROP FUNCTION IF EXISTS dbsupermercado.fCrearMarca;
+DELIMITER $$
+CREATE FUNCTION dbsupermercado.fCrearMarca(vmarca varchar(50))
+RETURNS varchar(50)
+DETERMINISTIC
+BEGIN
+    INSERT INTO dbSupermercado.tblMarcas(marca)
+    VALUES (upper(vmarca));
+    RETURN vmarca;
+end $$
+DELIMITER ;
+
+select dbsupermercado.fCrearMarca('IBERICOS');
+
+
 /* Registrar un producto en la base de datos conociendo el codigo, nombre del producto, el precio, la cantidad, la medida, categoría, marca, si está en oferta o no, el proveedor del producto, el almacen y la tienda. Una vez que se registre, me devuelva el codigo de barras generado. */
 
 /* PRACTICA INNER JOIN */
