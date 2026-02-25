@@ -64,7 +64,7 @@ CREATE FUNCTION dbsupermercado.fCrearMarca(vmarca varchar(50))
 RETURNS varchar(50)
 DETERMINISTIC
 BEGIN
-    if  () then
+    if  (fBuscarMarca(vmarca)) then
             INSERT INTO dbSupermercado.tblMarcas(marca)
             VALUES (upper(vmarca));
             RETURN vmarca;
