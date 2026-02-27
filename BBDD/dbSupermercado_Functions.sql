@@ -2,6 +2,8 @@
 /* qewrqwerwq */
 
 
+
+
 /* Saber una tienda por la localidad, y si está que me devuelva el ID */
 use dbsupermercado;
 DROP FUNCTION IF EXISTS dbsupermercado.fBuscarTienda;
