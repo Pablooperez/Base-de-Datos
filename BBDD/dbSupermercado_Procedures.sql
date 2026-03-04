@@ -136,6 +136,35 @@ delimiter ;
 
 call dbSupermercado.pCrearMarca('ww');
 
+/* Crear una tienda */
+
+drop procedure if exists dbsupermercado.pCrearTienda;
+delimiter $$
+create procedure dbsupermercado.pCrearTienda(vIdSuper tinyint,vCodigo int, vIDLocalidad varchar(5), vHAper int, vHCierre int, vHorario varchar(50), vGerente int, vDireccion varchar(100), vTel varchar(20), vEmail varchar(50))
+begin
+    insert into dbsupermercado.tbltiendas(idsuper)
+        values (vIdSuper);
+    insert into dbsupermercado.tbltiendas(codigo)
+        values  (vCodigo);
+    insert into dbsupermercado.tbltiendas(idlocalidad)
+        values (vIDLocalidad);
+    insert into dbsupermercado.tbltiendas(hora_apertura)
+        values (vHAper);
+    insert into dbsupermercado.tbltiendas(hora_cierre)
+        values (vHCierre);
+    insert into dbsupermercado.tbltiendas(horario)
+        values (vHorario);
+    insert into dbsupermercado.tbltiendas(gerente)
+        values (vGerente);
+    insert into dbsupermercado.tbltiendas(direccion)
+        values (vDireccion);
+    insert into dbsupermercado.tbltiendas(telefono)
+        values (vTel);
+    insert into dbsupermercado.tbltiendas(email)
+        values (vEmail);
+end $$
+
+call dbSupermercado.pCrearTienda(21,0,'12345',8,22,'Lunes-Domingo',0,'masquefa','987789876','palelele@rer.com');
 
 /* PROCEDIMIENTOS ALMACENADOS */
 
