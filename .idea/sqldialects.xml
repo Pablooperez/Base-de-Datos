@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DML.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DML_Datos1.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DML_Datos2.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_EjercicosPracticasFuncionesyProcedimientos.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Function_Polimorfica.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Functions.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Procedures.sql" dialect="MySQL" />
   </component>

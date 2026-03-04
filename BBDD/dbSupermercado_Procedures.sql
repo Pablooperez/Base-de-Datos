@@ -53,7 +53,7 @@ BEGIN
 end $$
 DELIMITER ;
 
-CALL dbSupermercado.pListarProductosCategoria("carnes");
+CALL dbSupermercado.pListarProductosCategoria('carnes');
 
 DROP PROCEDURE IF EXISTS dbsupermercado.pDimeCategoria;
 DELIMITER $$
@@ -89,3 +89,137 @@ DELIMITER ;
 CALL dbSupermercado.PInforme(@cp,@pmin,@pmax,@IVen,@ICos);
 
 select @cp as cantidad,@pmin as preciominimo,@pmax as preciomaximo,@IVen as inventarioventas,@ICos as inventariocostes;
+
+/* Crear una categoría */
+
+drop procedure if exists dbsupermercado.pCrearCategoria;
+delimiter $$
+create procedure dbsupermercado.pCrearCategoria(vCategoria varchar(50))
+begin
+    declare vIdCategoria int;
+    declare vResultado int;
+    set vResultado=1;
+    set vIdCategoria=fBuscarCategoria(vCategoria);
+    if(vIdCategoria=0) then
+        insert into dbsupermercado.tblcategorias(categoria)
+            values (UPPER(vCategoria));
+        select idcategoria
+        from tblcategorias
+        where categoria like vCategoria;
+    else select vResultado;
+    end if;
+end $$
+delimiter ;
+
+call dbSupermercado.pCrearCategoria('tyyy');
+
+/* Crear una marca */
+
+drop procedure if exists dbSupermercado.pCrearMarca;
+delimiter $$
+create procedure dbsupermercado.pCrearMarca(vMarca varchar(50))
+begin
+    declare vIdMarca int;
+    declare vResultado int;
+    set vResultado=1;
+    set vIdMarca=fBuscarMarca(vMarca);
+    if(vIdMarca=0) then
+        insert into dbsupermercado.tblmarcas(marca)
+            values (UPPER(vMarca));
+        select tblmarcas.idmarca
+        from tblmarcas
+        where marca like vMarca;
+    else select vResultado;
+    end if;
+end $$
+delimiter ;
+
+call dbSupermercado.pCrearMarca('ww');
+
+/* PROCEDIMIENTOS ALMACENADOS */
+
+/* 12:
+Enunciado: Crea un procedimiento que muestre todos los productos registrados en la base de datos.
+
+Resultado: Lista completa de productos */
+
+drop procedure if exists dbsupermercado.pListadoCompletoProductos;
+delimiter $$
+create procedure dbsupermercado.pListadoCompletoProductos()
+begin
+    select *
+    from dbsupermercado.tblproductos;
+end $$
+delimiter ;
+
+call dbsupermercado.pListadoCompletoProductos();
+
+/* 13:
+Enunciado: Desarrolla un procedimiento que muestre los detalles de un producto específico por su código de barra.
+
+Resultado: Detalles completos del producto */
+
+drop procedure if exists dbsupermercado.pDetallesProductoID;
+delimiter $$
+create procedure dbsupermercado.pDetallesProductoID(vID int)
+begin
+    select *
+    from dbsupermercado.tblproductos
+    where codigobarra=vID;
+end $$
+
+call dbsupermercado.pDetallesProductoID(1);
+
+/* 14:
+Enunciado: Implementa un procedimiento que cuente el total de productos registrados y devuelva el resultado.
+
+Resultado: Número total de productos en el inventario */
+
+drop procedure if exists dbsupermercado.pTotalInventario;
+delimiter $$
+create procedure dbsupermercado.pTotalInventario()
+begin
+    select count(*)
+    from dbsupermercado.tblproductos;
+end $$
+
+call dbsupermercado.pTotalInventario();
+
+/* 15:
+Enunciado: Crea un procedimiento que liste todos los productos de una categoría específica.
+
+Resultado: Lista de productos de la categoría especificada */
+
+drop procedure if exists dbsupermercado.pProductosCategoria;
+delimiter $$
+create procedure dbsupermercado.pProductosCategoria(vCategoria varchar(50))
+begin
+    declare vIdCategoria int;
+    set vIdCategoria=fBuscarCategoria(vCategoria);
+    if(vIdCategoria!=0) then
+        select *
+        from dbsupermercado.tblproductos
+        where idcategoría=vIdCategoria;
+    else select 'No existe' as Resultado;
+    end if ;
+end $$
+
+call dbSupermercado.pProductosCategoria('bebidas');
+
+/* 16:
+Enunciado: Desarrolla un procedimiento que genere un informe estadístico del inventario incluyendo cantidad, precios mínimos/máximos y valor total.
+
+Resultado: Estadísticas completas del inventario */
+
+drop procedure if exists dbsupermercado.pInventarioSelecto;
+delimiter $$
+create procedure dbsupermercado.pInventarioSelecto()
+begin
+    select tblproductos.producto as producto, tblproductos.cantidad as cantidad, tblproductos.precio_oferta as precio_minimo, tblproductos.precio_venta as precio_maximo, sum(cantidad*precio_venta) as valor_total
+    from dbsupermercado.tblproductos
+    group by producto;
+end $$
+
+call dbSupermercado.pInventarioSelecto();
+
+

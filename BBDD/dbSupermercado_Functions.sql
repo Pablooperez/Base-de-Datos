@@ -251,10 +251,64 @@ create function dbsupermercado.fBuscarOfertaACategoria(vOferta varchar(100),vCat
 returns int
 deterministic
 begin
-    if  (fBuscarTipoOferta(vOferta!=0) and fBuscarCategoria(vCategoria)!=0) then
-        
-    end if $$
+    declare vIdOferta int;
+    declare vIdCategoria int;
+    declare vResultado int default 0;
+    set vIdOferta=dbsupermercado.fBuscarTipoOferta(vOferta);
+    set vIdCategoria=dbsupermercado.fBuscarCategoria(vCategoria);
+
+    if  (vIdOferta!=0 and vIdCategoria!=0) then
+        select count(*) into vResultado
+        from tblofertas
+        where idoferta=vIdOferta and tblofertas.idcategoria=vIdCategoria;
+    end if ;
+    return vResultado;
 end $$
+
+select dbsupermercado.fBuscarOfertaACategoria('2x1','supercor');
+
+/* 11:
+Enunciado: Desarrolla una función polimórfica que pueda buscar diferentes tipos de elementos según un parámetro numérico.
+
+Tipos de búsqueda:
+
+1: producto (código)
+2: tienda (código localidad)
+3: proveedor (CIF)
+4: categoría (nombre)
+5: marca (nombre)
+6: tipo venta (nombre)
+7: medida (nombre)
+8: oferta (nombre)
+9: oferta y categoría (formato "oferta|categoría")
+10: localidad (nombre) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
