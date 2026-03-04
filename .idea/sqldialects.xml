@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/BBDD/Script_DCL.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/SupermercadoTame_DCL.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbCoachify_DML.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbCoachify_DQL.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DDL.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DML.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DML_Datos1.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DML_Datos2.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DQL.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_DQL_Practicar.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_EjercicosPracticasFuncionesyProcedimientos.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Function_Polimorfica.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Function_Polimorfica.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Functions.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Procedures.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/ejerciciosdbGestionEscolar.sql" dialect="MySQL" />
   </component>
 </project>

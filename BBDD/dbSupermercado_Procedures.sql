@@ -136,6 +136,7 @@ delimiter ;
 
 call dbSupermercado.pCrearMarca('ww');
 
+
 /* PROCEDIMIENTOS ALMACENADOS */
 
 /* 12:
@@ -221,5 +222,6 @@ begin
 end $$
 
 call dbSupermercado.pInventarioSelecto();
+
 
 
