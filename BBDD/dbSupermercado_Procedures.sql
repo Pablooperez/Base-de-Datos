@@ -140,31 +140,22 @@ call dbSupermercado.pCrearMarca('ww');
 
 drop procedure if exists dbsupermercado.pCrearTienda;
 delimiter $$
-create procedure dbsupermercado.pCrearTienda(vIdSuper tinyint,vCodigo int, vIDLocalidad varchar(5), vHAper int, vHCierre int, vHorario varchar(50), vGerente int, vDireccion varchar(100), vTel varchar(20), vEmail varchar(50))
+create procedure dbsupermercado.pCrearTienda( in vIdSuper tinyint, in vCodigo int, in vIDLocalidad varchar(5), in vHAper int, in vHCierre int, in vHorario varchar(50), in vGerente int, in vDireccion varchar(100), in vTel varchar(20), in vEmail varchar(50), out vResultado int )
 begin
-    insert into dbsupermercado.tbltiendas(idsuper)
-        values (vIdSuper);
-    insert into dbsupermercado.tbltiendas(codigo)
-        values  (vCodigo);
-    insert into dbsupermercado.tbltiendas(idlocalidad)
-        values (vIDLocalidad);
-    insert into dbsupermercado.tbltiendas(hora_apertura)
-        values (vHAper);
-    insert into dbsupermercado.tbltiendas(hora_cierre)
-        values (vHCierre);
-    insert into dbsupermercado.tbltiendas(horario)
-        values (vHorario);
-    insert into dbsupermercado.tbltiendas(gerente)
-        values (vGerente);
-    insert into dbsupermercado.tbltiendas(direccion)
-        values (vDireccion);
-    insert into dbsupermercado.tbltiendas(telefono)
-        values (vTel);
-    insert into dbsupermercado.tbltiendas(email)
-        values (vEmail);
+    if not exists(select tblsupermercados.idsuper from tblsupermercados where vIdSuper=idsuper) then
+        set vResultado=-1;
+    elseif exists(select tbltiendas.codigo from tbltiendas where vCodigo=codigo) then
+        set vResultado=-2;
+    else
+        insert into dbsupermercado.tbltiendas(idsuper,codigo,idlocalidad,hora_apertura, hora_cierre, horario, gerente, direccion, telefono, email)
+        values (vIdSuper,vCodigo,vIDLocalidad,vHAper,vHCierre, vHorario, vGerente, vDireccion, vTel, vEmail);
+    set vResultado=last_insert_id();
+    end if;
 end $$
+delimiter ;
 
-call dbSupermercado.pCrearTienda(21,0,'12345',8,22,'Lunes-Domingo',0,'masquefa','987789876','palelele@rer.com');
+call dbSupermercado.pCrearTienda(7,1,'03001',8,22,'Lunes-Domingo',0,'masquefa','987789876','palelele@rer.com',@vResultado);
+select @vResultado;
 
 /* PROCEDIMIENTOS ALMACENADOS */
 
@@ -247,6 +238,7 @@ create procedure dbsupermercado.pInventarioSelecto()
 begin
     select tblproductos.producto as producto, tblproductos.cantidad as cantidad, tblproductos.precio_oferta as precio_minimo, tblproductos.precio_venta as precio_maximo, sum(cantidad*precio_venta) as valor_total
     from dbsupermercado.tblproductos
+    order by producto
     group by producto;
 end $$
 
