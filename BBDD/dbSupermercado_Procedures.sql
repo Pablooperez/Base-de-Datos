@@ -145,7 +145,7 @@ begin
     if not exists(select tblsupermercados.idsuper from tblsupermercados where vIdSuper=idsuper) then
         set vResultado=-1;
     elseif exists(select tbltiendas.codigo from tbltiendas where vCodigo=codigo) then
-        set vResultado=-2;
+        set vResultado=0;
     else
         insert into dbsupermercado.tbltiendas(idsuper,codigo,idlocalidad,hora_apertura, hora_cierre, horario, gerente, direccion, telefono, email)
         values (vIdSuper,vCodigo,vIDLocalidad,vHAper,vHCierre, vHorario, vGerente, vDireccion, vTel, vEmail);
@@ -244,5 +244,20 @@ end $$
 
 call dbSupermercado.pInventarioSelecto();
 
+/* CREAR UN PROCEDIMIENTO PARA REGISTRAR UN NUEVO PRODUCTO CON TODAS SUS CARACTERISTICAS Y VALIDACIONES */
+
+drop procedure if exists dbsupermercado.pRegistrarProducto;
+delimiter $$
+create procedure dbsupermercado.pRegistrarProducto(in v_codigo int, in v_producto varchar(100), in v_informacion varchar(150), in v_origen varchar(100), in v_cantidad int, in v_cantalert float, in v_precio float, in v_precio_oferta float, in v_precio_venta float, in v_iva tinyint, in v_contenido float, in v_peso float, in v_vencimiento varchar(10), in v_fila tinyint, in v_pasillo tinyint, in v_estanteria tinyint, in v_nevera tinyint, in v_medida varchar(50), in v_idcategoria tinyint, in v_idmarca tinyint, in iv_idoferta tinyint, in v_idproveedor tinyint, in v_idalmacen tinyint, in v_idtienda tinyint, in v_idsuper tinyint, out v_resultado int)
+begin
+    if(fBuscarProductoCod(v_codigo)=0
+           and fProveedorId(v_idproveedor)=v_idproveedor
+           and fBuscarProductoNom(v_producto)=0
+           and fBuscarProductoInf(v_informacion)=0
+           and fBuscarTipoMedida(v_medida)!=0
+           and fBuscarMarca(v_idmarca)!=0
+           and
+
+end $$
 
 

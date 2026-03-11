@@ -37,7 +37,7 @@ BEGIN
     RETURN ifnull(v_idcategoria,0);
 end $$
 DELIMITER ;
-select dbsupermercado.fCategoria('bebe');
+select dbsupermercado.fCategoria('caca');
 
 /* Crear una categoría */
 
@@ -91,20 +91,56 @@ create function dbsupermercado.fRegistrarProducto(vCodigo int,vNombre varchar(10
 /* 1:
 Enunciado: Crea una función que busque un producto por su código de barra y devuelva su ID. Si no existe, debe retornar 0. */
 
-DROP FUNCTION IF EXISTS dbsupermercado.fBuscarProductoCB;
+DROP FUNCTION IF EXISTS dbsupermercado.fBuscarProductoCod;
 delimiter $$
-create function dbsupermercado.fBuscarProductoCB(vCodigoBarras int)
+create function dbsupermercado.fBuscarProductoCod(vCodigo int)
+returns int
+deterministic
+begin
+    return ifnull(
+           (select dbsupermercado.tblproductos.codigobarra
+            from dbsupermercado.tblproductos
+            where tblproductos.codigo=vCodigo),0);
+
+end $$
+
+select dbsupermercado.fBuscarProductoCod(100063);
+
+/* VERIFICAR NOMBRE PRODUCTO */
+
+drop function if exists dbsupermercado.fBuscarProductoNom;
+delimiter $$
+create function dbsupermercado.fBuscarProductoNom(vNom varchar(100))
 returns int
 deterministic
 begin
     return ifnull(
            (select dbsupermercado.tblproductos.codigo
             from dbsupermercado.tblproductos
-            where tblproductos.codigobarra=vCodigoBarras),0);
+            where tblproductos.producto=vNom),0);
 
 end $$
 
-select dbsupermercado.fBuscarProductoCB(1123213);
+select dbsupermercado.fBuscarProductoNom('Tabla de Cortar Bambú');
+
+/* VERIFICAR INFORMACION DEL PRODUCTO */
+
+drop function if exists dbsupermercado.fBuscarProductoInf;
+delimiter $$
+create function dbsupermercado.fBuscarProductoInf(vInf varchar(150))
+returns int
+deterministic
+begin
+    return ifnull(
+           (select dbsupermercado.tblproductos.codigo
+            from dbsupermercado.tblproductos
+            where tblproductos.información=vInf),0);
+
+end $$
+
+select dbsupermercado.fBuscarProductoInf('Tabla de cortar ecológica');
+
+
 
 /* 2:
 Enunciado: Desarrolla una función que busque una localidad por su nombre y devuelva su ID (código postal). La búsqueda debe ser insensible a mayúsculas/minúsculas y espacios. */
@@ -157,6 +193,70 @@ end $$
 DELIMITER ;
 select dbsupermercado.fProveedor('A123456');
 
+DROP FUNCTION IF EXISTS dbsupermercado.fProveedorId;
+DELIMITER $$
+CREATE FUNCTION dbsupermercado.fProveedorId(_id int)
+RETURNS tinyint
+DETERMINISTIC
+BEGIN
+    RETURN ifnull(
+            (select idproveedor
+            from dbsupermercado.tblproveedores
+            where tblproveedores.idproveedor=_id),0);
+end $$
+DELIMITER ;
+
+select dbsupermercado.fProveedorId(2);
+
+/* BUSCAR ALMACEN Y SI EXISTE DEVUELVE EL ID */
+
+drop function if exists dbsupermercado.fBuscarAlmacen;
+delimiter $$
+create function dbsupermercado.fBuscarAlmacen(_nombre varchar(50))
+returns tinyint
+deterministic
+begin
+    return ifnull(
+           (select tbltiendaalmacen.idalmacen
+           from dbsupermercado.tbltiendaalmacen
+           where tbltiendaalmacen.descripcion=_nombre),0);
+end $$
+delimiter ;
+
+select dbsupermercado.fBuscarAlmacen('Almacen Central Madrid');
+
+drop function if exists dbsupermercado.fBuscarTiendaID;
+delimiter $$
+create function dbsupermercado.fBuscarTiendaID(_idtienda int)
+returns tinyint
+deterministic
+begin
+    return ifnull(
+           (select tbltiendas.idtienda
+           from dbsupermercado.tbltiendas
+           where tbltiendas.idtienda=_idtienda),0);
+end $$
+delimiter ;
+
+select dbsupermercado.fBuscarTiendaID(23);
+
+drop function if exists dbsupermercado.fBuscarSuper;
+delimiter $$
+create function dbsupermercado.fBuscarSuper(_super varchar(100))
+returns tinyint
+deterministic
+begin
+    return ifnull(
+           (select tblsupermercados.idsuper
+           from dbsupermercado.tblsupermercados
+           where tblsupermercados.super=_super),0);
+end $$
+delimiter ;
+
+select dbsupermercado.fBuscarSuper('Alcampo');
+
+
+
 /* 5:
 Enunciado: Desarrolla una función que busque una categoría por su nombre y devuelva su ID. */
 
@@ -173,7 +273,7 @@ begin
 
 end $$
 
-select dbsupermercado.fBuscarCategoria('bebe');
+select dbsupermercado.fBuscarCategoria('caca');
 
 /* 6:
 Enunciado: Implementa una función que busque una marca por su nombre y devuelva su ID. */
