@@ -12,7 +12,7 @@
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_EjercicosPracticasFuncionesyProcedimientos.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Functions.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Procedures.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/BBDD/dbSupermercado_Triggers_Ejercicios.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/BBDD/ejerciciosdbGestionEscolar.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/dbSupermercado_Triggers_Ejercicios.sql" dialect="MySQL" />
   </component>
 </project>
