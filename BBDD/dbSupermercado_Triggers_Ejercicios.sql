@@ -1,3 +1,4 @@
+use dbsupermercado;
 DROP TABLE IF EXISTS dbsupermercado.tbl_auditoria_precios;
 CREATE TABLE dbsupermercado.tbl_auditoria_precios
 (
@@ -56,18 +57,151 @@ select * from tbl_auditoria_precios;
     -- Si cantidad > 0 entonces new.tbl.productos.cantidad = cantidad
 -- Algoritmo:
 
+-- Update
+
+drop trigger if exists dbsupermercado.trCantNega;
+delimiter $$
+CREATE TRIGGER dbsupermercado.trCantNega
+    BEFORE
+    UPDATE
+    on tblproductos
+    FOR EACH ROW
+    BEGIN
+        if NEW.cantidad <= 0 then
+                set NEW.cantidad = 0;
+        else
+                set new.cantidad = NEW.cantidad;
+        end if;
+    end $$
+    delimiter ;
+
+-- Insert
+
+drop trigger if exists dbsupermercado.trCantNega1;
+delimiter $$
+CREATE TRIGGER dbsupermercado.trCantNega1
+    BEFORE
+    INSERT
+    on tblproductos
+    FOR EACH ROW
+    BEGIN
+        if NEW.cantidad <= 0 then
+                set NEW.cantidad = 0;
+        else
+                set new.cantidad = NEW.cantidad;
+        end if;
+    end $$
+    delimiter ;
+
+select tblproductos.cantidad from dbsupermercado.tblproductos;
+
+update tblproductos
+set cantidad = -1
+where codigobarra = 1;
+
+select tblproductos.cantidad from dbsupermercado.tblproductos;
+
+-- Ahora en rutina.
+
+drop function if exists dbSupermercado.fDevolucionCantidad;
+delimiter $$
+create function dbsupermercado.fDevolucionCantidad(vCant int)
+returns int
+deterministic
+begin
+if  vCant >= 0 then
+    return vCant;
+else
+    return 0;
+end if;
+end $$
+delimiter ;
+
+select dbsupermercado.fDevolucionCantidad(-1);
+
+
+
 -- Ejercicio 3:
 -- Enunciado: Crear una rutina que al insertar un empleado asigne automaticamente la fecha de alta.
 -- Analisis: Primero tenemos que ver sobre qué tabla estamos vigilando, y seguidamente sobre qué procesos tenemos que vigilar.
     -- Tabla a vigilar: tblempleados Procesos a vigilar: Insert.
-    -- Dado que dentro de tblempleados, no disponemos de una columna fecha_alta, debemos crearla.
+    -- Dado que dentro de tblempleados, no disponemos de una columna fecha_alta, debemos crearla. Alter table.
     -- Cuando se realiza un Insert dentro de tblempleados, automaticamente en fecha_alta = current_date().
 -- Algoritmo:
+ALTER TABLE tblempleados add column fecha_alta date;
+-- Cuando se añaden nuevos usuarios:
+drop trigger if exists dbsupermercado.trFechaAltaAuto1;
+delimiter $$
+create trigger dbsupermercado.trFechaAltaAuto1
+    before
+    insert
+    on tblempleados
+    for each row
+    BEGIN
+        declare fecha date;
+        set fecha = current_date;
+
+        set new.fecha_alta = fecha;
+
+    end $$
+    delimiter ;
+
+insert into dbsupermercado.tblempleados(dni, nombre, apellidos, nacimiento, sexo, direccion1, direccion2, idlocalidad, telefono, email)
+VALUES ('1234123', 'Empleado 1', 'Apellido 1', 111970, 1, 'Ave Gran via 1', 'Oviedo Ciudad', 46001,
+        600600600,'info@gmail.com');
+
+select * from dbsupermercado.tblempleados;
+-- Cuando se modifican usuarios
+drop trigger if exists dbsupermercado.trFechaAltaAuto2;
+delimiter $$
+create trigger dbsupermercado.trFechaAltaAuto2
+    before
+    update
+    on tblempleados
+    for each row
+    BEGIN
+        declare fecha date;
+        set fecha = current_date;
+
+        set new.fecha_alta = fecha;
+
+    end $$
+    delimiter ;
+
+update dbsupermercado.tblempleados
+set nombre = 'Pablo'
+where nombre = 'Juan';
+
+
+
+
 
 -- Ejercicio 4:
 -- Enunciado: Crear una rutina automatizada que calcule automaticamente el precio de venta cuando se modifique el precio de coste o el IVA. Precio-Venta = (PrecioCoste+IVA)*1.30.
--- Analisis:
+-- Analisis: Primero vamos a crear una función polimórfica.
 -- Algoritmo:
+
+drop function if exists dbsupermercado.fpMoficiarPrecio;
+delimiter $$
+create function dbsupermercado.fpModificarPrecio(v_codigobarra int, v_precio float, v_tipo int)
+returns int
+deterministic
+begin
+
+    if  v_tipo = 1 then
+        update dbsupermercado.tblproductos
+        set tblproductos.precio_venta = (v_precio * (1 + (1/tblproductos.iva)))
+        where codigobarra = v_codigobarra;
+    end if;
+
+    if  v_tipo = 2 then
+        update dbsupermercado.tblproductos
+        set tblproductos.precio_venta = (tblproductos.precio (1 + (1/v_precio)))
+        where codigobarra = v_codigobarra;
+    end if;
+
+end $$
+delimiter ;
 
 
 
