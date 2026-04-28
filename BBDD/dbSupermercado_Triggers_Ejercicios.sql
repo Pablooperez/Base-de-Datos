@@ -44,7 +44,7 @@ select * from tbl_auditoria_precios;
 
 update tblproductos
 set precio = 20
-where codigo in (100001, 100002);
+where codigo in (100001);
 
 select * from tbl_auditoria_precios;
 
@@ -181,7 +181,7 @@ where nombre = 'Juan';
 -- Analisis: Primero vamos a crear una función polimórfica.
 -- Algoritmo:
 
-drop function if exists dbsupermercado.fpMoficiarPrecio;
+drop function if exists dbsupermercado.fpModificarPrecio;
 delimiter $$
 create function dbsupermercado.fpModificarPrecio(v_codigobarra int, v_precio float, v_tipo int)
 returns int
@@ -190,18 +190,41 @@ begin
 
     if  v_tipo = 1 then
         update dbsupermercado.tblproductos
-        set tblproductos.precio_venta = (v_precio * (1 + (1/tblproductos.iva)))
+        set tblproductos.precio_venta = (v_precio * (1 + (tblproductos.iva/100)))
         where codigobarra = v_codigobarra;
+        return tblproductos.precio_venta;
     end if;
 
     if  v_tipo = 2 then
         update dbsupermercado.tblproductos
-        set tblproductos.precio_venta = (tblproductos.precio (1 + (1/v_precio)))
+        set tblproductos.precio_venta = (tblproductos.precio * (1 + (v_precio/100)))
         where codigobarra = v_codigobarra;
+        return tblproductos.precio_venta;
     end if;
-
 end $$
 delimiter ;
+
+drop trigger if exists dbsupermercado.tModificarPrecio;
+delimiter $$
+create trigger dbsupermercado.tModificarPrecio
+    before
+    update
+    on tblproductos
+    for each row
+    begin
+        if  (new.precio!=OLD.precio) then
+            call dbsupermercado.fpModificarPrecio(old.codigobarra,new.precio,1);
+        end if;
+        if  (new.iva!=old.iva) then
+            call dbsupermercado.fpModificarPrecio(OLD.codigobarra, new.iva, 2);
+        end if ;
+end $$
+delimiter ;
+
+update tblproductos
+set precio = 50
+where codigo in (100001);
+
 
 
 
