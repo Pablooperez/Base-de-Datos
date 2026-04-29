@@ -140,9 +140,7 @@ create trigger dbsupermercado.trFechaAltaAuto1
     BEGIN
         declare fecha date;
         set fecha = current_date;
-
         set new.fecha_alta = fecha;
-
     end $$
     delimiter ;
 
@@ -160,11 +158,7 @@ create trigger dbsupermercado.trFechaAltaAuto2
     on tblempleados
     for each row
     BEGIN
-        declare fecha date;
-        set fecha = current_date;
-
-        set new.fecha_alta = fecha;
-
+        set new.fecha_alta = current_date;
     end $$
     delimiter ;
 
@@ -224,6 +218,44 @@ delimiter ;
 update tblproductos
 set precio = 50
 where codigo in (100001);
+
+-- Ejercicio 5:
+-- Enunciado: Crear una rutina que mantenga actualizado el estado de un empleado. Cuando se da de alta un nuevo empleado, su estado debe ser activo por defecto.
+-- cuando se modifica la fecha de baja, el estado debe pasar a inactivo.
+-- Debemos crear Estado - Fecha_Baja.
+
+
+
+ALTER TABLE tblempleados add column estado varchar(20) default 'activo';
+ALTER TABLE tblempleados add column fecha_baja date;
+
+drop trigger if exists dbsupermercado.tActualizarEmpleado;
+delimiter $$
+create trigger dbsupermercado.tActualizarEmpleado
+    before
+    update
+    on tblempleados
+    for each row
+    begin
+        if  (new.fecha_baja!=old.fecha_baja) then
+            set new.estado= 'inactivo';
+        end if;
+    end $$
+    delimiter ;
+
+update tblempleados
+set fecha_baja = '2025-12-12'
+where idempleado = 1;
+
+update tblempleados
+set fecha_baja = '2025-11-12'
+where idempleado = 24;
+
+update tblempleados
+set fecha_baja = '2025-11-12'
+where idempleado = 24;
+
+
 
 
 
