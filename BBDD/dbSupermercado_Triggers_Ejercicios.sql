@@ -225,8 +225,8 @@ where codigo in (100001);
 -- Debemos crear Estado - Fecha_Baja.
 
 
-
-ALTER TABLE tblempleados add column estado varchar(20) default 'activo';
+ALTER TABLE tblempleados drop column estado;
+ALTER TABLE tblempleados add column estado varchar(20) default 'Activo';
 ALTER TABLE tblempleados add column fecha_baja date;
 
 drop trigger if exists dbsupermercado.tActualizarEmpleado;
@@ -237,7 +237,7 @@ create trigger dbsupermercado.tActualizarEmpleado
     on tblempleados
     for each row
     begin
-        if  (new.fecha_baja!=old.fecha_baja) then
+        if  (old.estado='activo') then
             set new.estado= 'inactivo';
         end if;
     end $$
@@ -254,6 +254,28 @@ where idempleado = 24;
 update tblempleados
 set fecha_baja = '2025-11-12'
 where idempleado = 24;
+
+update tblempleados
+set fecha_baja = '2025-11-12'
+where idempleado = 12;
+
+update tblempleados
+set fecha_baja = '2025-11-12'
+where idempleado = 11;
+
+update tblempleados
+set fecha_baja = '2025-11-12'
+where idempleado = 10;
+
+update tblempleados
+set fecha_baja = '2025-11-12'
+where idempleado = 09;
+
+update tblempleados
+set fecha_baja = '2024-11-12'
+where idempleado = 06;
+
+
 
 
 
