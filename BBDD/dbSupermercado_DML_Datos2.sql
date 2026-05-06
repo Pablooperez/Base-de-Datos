@@ -7,7 +7,17 @@ PARTE 2: AÑADIR 10 OFERTAS Y ASIGNARLAS A TIENDAS Y PRODUCTOS
 USE dbSupermercado;
 
 BEGIN;
-
+-- Añadir caja
+INSERT INTO dbsupermercado.tblcajaventas(tipocaja, estado, idempleado)
+values (1,1,1);
+-- Añadir tickets
+INSERT INTO dbsupermercado.tbltickets(fecha_hora, importe, pagado, ticket, idmetodopago, idempleado, idtipoventa, idsocio, idcaja, info_ticket)
+VALUES
+('2025-12-12',20,20, 0,1, 1,1, 1,1,'Jamon'),
+('2025-12-12',20,20, 0,1, 1,1, 1,1,'Jamon'),
+('2025-12-12',20,20, 0,1, 1,1, 1,1,'Jamon'),
+('2025-12-12',20,20, 0,1, 1,1, 1,1,'Jamon'),
+('2025-12-12',20,20, 0,1, 2,1, 1,1,'Jamon');
 -- Añadir más ofertas
 INSERT INTO tblOfertas(detalle, oferta, valor, tipo_descuento, idcategoria)
 VALUES

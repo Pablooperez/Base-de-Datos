@@ -275,6 +275,26 @@ update tblempleados
 set fecha_baja = '2024-11-12'
 where idempleado = 06;
 
+-- Ejercicio 6:
+-- Enunciado: Crea una función para calcular cual es el empleado que mas factura.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Ejercicio 7:
+-- Enunciado: Crea una funcion para calcular cual es el proveedor que mas ingreso me genera.
 
 
 
